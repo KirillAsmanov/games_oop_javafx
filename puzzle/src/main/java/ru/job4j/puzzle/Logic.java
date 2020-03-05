@@ -71,6 +71,53 @@ public class Logic {
     public boolean isWin() {
         int[][] table = this.convert();
         boolean result = false;
+
+        boolean winRow = false;
+        boolean winColumn = false;
+        boolean winDiagonal = false;
+        boolean winDiagonalReverse = false;
+
+        for (int i = 0; i < table.length; i++) {
+            if (table[i][i] == 1) {
+                winRow = true;
+                winColumn = true;
+                winDiagonal = true;
+                winDiagonalReverse = true;
+
+                for (int index = 0; index < table[i].length; index++) {
+                    if (table[i][index] != 1) {
+                        winRow = false;
+                        break;
+                    }
+                }
+
+                for (int index = 0; index < table.length; index++) {
+                    if (table[index][i] != 1) {
+                        winColumn = false;
+                        break;
+                    }
+                }
+
+                for (int index = 0; index < table.length; index++) {
+                    if (table[index][index] != 1) {
+                        winDiagonal = false;
+                        break;
+                    }
+                }
+
+                for (int index = 0; index < table.length; index++) {
+                    if (table[index][table.length - 1 - index] != 1) {
+                        winDiagonalReverse = false;
+                        break;
+                    }
+                }
+            }
+
+            if (winColumn || winDiagonal || winRow || winDiagonalReverse) {
+                result = true;
+                break;
+            }
+        }
         return result;
     }
 
