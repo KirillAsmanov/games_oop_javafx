@@ -72,50 +72,29 @@ public class Logic {
         int[][] table = this.convert();
         boolean result = false;
 
-        boolean winRow = false;
-        boolean winColumn = false;
-        boolean winDiagonal = false;
-        boolean winDiagonalReverse = false;
+        int winRow = 0;
+        int winColumn = 0;
 
         for (int i = 0; i < table.length; i++) {
             if (table[i][i] == 1) {
-                winRow = true;
-                winColumn = true;
-                winDiagonal = true;
-                winDiagonalReverse = true;
-
-                for (int index = 0; index < table[i].length; index++) {
-                    if (table[i][index] != 1) {
-                        winRow = false;
-                        break;
-                    }
-                }
 
                 for (int index = 0; index < table.length; index++) {
-                    if (table[index][i] != 1) {
-                        winColumn = false;
-                        break;
+                    if (table[i][index] == 1) {
+                        winRow++;
+                    }
+
+                    if (table[index][i] == 1) {
+                        winColumn++;
                     }
                 }
 
-                for (int index = 0; index < table.length; index++) {
-                    if (table[index][index] != 1) {
-                        winDiagonal = false;
-                        break;
-                    }
+                if ((winColumn == table.length) || (winRow == table.length)) {
+                    result = true;
+                    break;
+                } else {
+                    winRow = 0;
+                    winColumn = 0;
                 }
-
-                for (int index = 0; index < table.length; index++) {
-                    if (table[index][table.length - 1 - index] != 1) {
-                        winDiagonalReverse = false;
-                        break;
-                    }
-                }
-            }
-
-            if (winColumn || winDiagonal || winRow || winDiagonalReverse) {
-                result = true;
-                break;
             }
         }
         return result;
