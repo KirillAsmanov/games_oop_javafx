@@ -25,10 +25,25 @@ public class Logic {
         boolean rst = false;
         int index = this.findBy(source);
         if (index != -1) {
-            Cell[] steps = this.figures[index].way(source, dest);
+            Cell[] steps = new Cell[0];
+            try {
+                steps = this.figures[index].way(source, dest);
+            } catch (IllegalStateException e) {
+                rst = false;
+            }
+
             if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
                 rst = true;
-                this.figures[index] = this.figures[index].copy(dest);
+                for (int i = 0; i < steps.length; i++) {
+                    if (findBy(steps[i]) != -1) {
+                            rst = false;
+                            break;
+                    }
+                }
+
+                if (rst) {
+                    this.figures[index] = this.figures[index].copy(dest);
+                }
             }
         }
         return rst;
