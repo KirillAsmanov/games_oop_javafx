@@ -29,21 +29,14 @@ public class Logic {
             try {
                 steps = this.figures[index].way(source, dest);
             } catch (IllegalStateException e) {
-                rst = false;
+                return false;
             }
 
-            if (steps.length > 0 && steps[steps.length - 1].equals(dest)) {
-                rst = true;
-                for (int i = 0; i < steps.length; i++) {
-                    if (findBy(steps[i]) != -1) {
-                            rst = false;
-                            break;
-                    }
-                }
-
-                if (rst) {
+            if ((steps.length > 0 && steps[steps.length - 1].equals(dest)) && isWayFree(steps)) {
                     this.figures[index] = this.figures[index].copy(dest);
-                }
+                    rst = true;
+            } else {
+                rst = false;
             }
         }
         return rst;
@@ -54,6 +47,17 @@ public class Logic {
             this.figures[position] = null;
         }
         this.index = 0;
+    }
+
+    public boolean isWayFree (Cell[] steps) {
+        boolean isWayFree = true;
+        for (int i = 0; i < steps.length; i++) {
+            if (findBy(steps[i]) != -1) {
+                isWayFree = false;
+                break;
+            }
+        }
+        return isWayFree;
     }
 
     private int findBy(Cell cell) {
