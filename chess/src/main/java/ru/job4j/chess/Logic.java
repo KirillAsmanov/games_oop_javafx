@@ -29,14 +29,12 @@ public class Logic {
             try {
                 steps = this.figures[index].way(source, dest);
             } catch (IllegalStateException e) {
-                return false;
+                String.format("Figure cannot move on this way");
             }
 
             if ((steps.length > 0 && steps[steps.length - 1].equals(dest)) && isWayFree(steps)) {
                     this.figures[index] = this.figures[index].copy(dest);
                     rst = true;
-            } else {
-                rst = false;
             }
         }
         return rst;
