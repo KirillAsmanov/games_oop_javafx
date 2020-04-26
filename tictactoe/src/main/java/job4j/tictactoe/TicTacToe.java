@@ -21,6 +21,7 @@ public class TicTacToe extends Application {
     private final int size = 3;
     private final Figure3T[][] cells = new Figure3T[size][size];
     private final Logic3T logic = new Logic3T(cells);
+    private int turn = 0;
 
     private Figure3T buildRectangle(int x, int y, int size) {
         Figure3T rect = new Figure3T();
@@ -59,13 +60,13 @@ public class TicTacToe extends Application {
         return gap;
     }
 
-    private void checkWinner() {
+    /*private void checkWinner() {
         if (this.logic.isWinnerX()) {
             this.showAlert("Победили Крестики! Начните новую Игру!");
         } else if (this.logic.isWinnerO()) {
             this.showAlert("Победили Нолики! Начните новую Игру!");
         }
-    }
+    }*/
 
     private Group buildMarkX(double x, double y, int size) {
         Group group = new Group();
@@ -86,18 +87,29 @@ public class TicTacToe extends Application {
         return event -> {
             Figure3T rect = (Figure3T) event.getTarget();
             if (this.checkState()) {
-                if (event.getButton() == MouseButton.PRIMARY) {
+                // Изменил зависимость Х или О от нажатой кнопки мыши на зависимость от очередности хода.
+                // Теперь символ ставится в зависимости от того, чей сейчас ход: Х или О
+                if (turn % 2 == 0) {
                     rect.take(true);
                     panel.getChildren().add(
                             this.buildMarkX(rect.getX(), rect.getY(), 50)
                     );
+                    if (this.logic.isWinner(Figure3T::hasMarkX)) {
+                        this.showAlert("Победили Крестики! Начните новую Игру!");
+                    }
                 } else {
                     rect.take(false);
                     panel.getChildren().add(
                             this.buildMarkO(rect.getX(), rect.getY(), 50)
                     );
+                    if (this.logic.isWinner(Figure3T::hasMarkO)) {
+                        this.showAlert("Победили Нолики! Начните новую Игру!");
+                    }
                 }
-                this.checkWinner();
+                // Убрал эту строчку и внес проверку на победу игрока после именно его хода,
+                // чтобы не крутить зазря циклы для для проверки победы О после хода Х и наоборот.
+                //this.checkWinner();
+                turn++;
                 this.checkState();
             }
         };
