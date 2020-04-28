@@ -74,7 +74,6 @@ public class Logic3T {
      * @return true - не заполнено, false - заполнено
      */
     public boolean hasGap() {
-        return Arrays.stream(table).flatMap(Arrays::stream).filter(e -> e.hasMarkX() || e.hasMarkO()).count() !=
-                Math.pow(table.length, 2);
+        return Arrays.stream(table).flatMap(Arrays::stream).anyMatch(e -> !e.hasMarkO() && !e.hasMarkX());
     }
 }
